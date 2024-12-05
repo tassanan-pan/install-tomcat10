@@ -1,0 +1,30 @@
+[root@localhost ~]# wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.33/bin/apache-tomcat-10.1.33.tar.gz
+[root@localhost ~]# ll
+[root@localhost ~]# sudo dnf install tar
+[root@localhost ~]# tar -xvzf apache-tomcat-10.1.33.tar.gz
+[root@localhost ~]# ll
+[root@localhost ~]# mv apache-tomcat-10.1.33 /opt/
+[root@localhost ~]# cd /
+[root@localhost /]# cd opt/
+[root@localhost opt]# ll
+
+Add zone secure
+
+[root@localhost ~]# vi /etc/firewalld/zones/securezone.xml
+[root@localhost ~]# firewall-cmd --reload
+[root@localhost ~]# nmcli device
+[root@localhost ~]# firewall-cmd --permanent --zone=securezone --change-interface=ens160
+[root@localhost ~]# sudo firewall-cmd --zone=securezone --list-all
+
+Add port 8080 in securezone
+[root@localhost ~]# sudo firewall-cmd --zone=securezone --permanent --add-port=8080/tcp
+[root@localhost ~]# sudo firewall-cmd --reload
+[root@localhost ~]# sudo firewall-cmd --zone=securezone --list-all
+[root@localhost ~]# cd /
+[root@localhost /]# cd opt/
+[root@localhost opt]# cd apache-tomcat-10.1.33/
+[root@localhost apache-tomcat-10.1.33]# ll
+[root@localhost apache-tomcat-10.1.33]# cd bin
+[root@localhost bin]# ./startup.sh
+[root@localhost bin]# tail -200f /opt/ apache-tomcat-10.1.33/logs/catalina.out
+[root@localhost bin]# sudo ss -tuln | grep 8080
